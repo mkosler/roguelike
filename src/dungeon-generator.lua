@@ -77,8 +77,8 @@ end
 
 local function fillRooms(self, attempts, minWidth, maxWidth, minHeight, maxHeight)
     attempts = attempts or 200
-    minWidth = minWidth or 5
-    maxWidth = maxWidth or 7
+    minWidth = minWidth or 3
+    maxWidth = maxWidth or 5
     minHeight = minHeight or minWidth
     maxHeight = maxHeight or maxWidth
 

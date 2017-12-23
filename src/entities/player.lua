@@ -13,26 +13,42 @@ return Class{
         self.moving = false
 
         self.signals = {
-            Signal.register('key', function (key, map)
-                if self.moving then return end
+            -- Signal.register('key', function (key, map)
+            --     if self.moving then return end
 
-                local nv = Vector()
-                local x, y = math.floor(self.pos.x), math.floor(self.pos.y)
+            --     local nv = Vector()
+            --     local x, y = math.floor(self.pos.x), math.floor(self.pos.y)
 
-                if key == 'left' and map:get(x - 1, y).visited then nv.x = -1
-                elseif key == 'right' and map:get(x + 1, y).visited then nv.x = 1
-                elseif key == 'up' and map:get(x, y - 1).visited then nv.y = -1
-                elseif key == 'down' and map:get(x, y + 1).visited then nv.y = 1
-                end
+            --     if key == 'left' and map:get(x - 1, y).visited then nv.x = -1
+            --     elseif key == 'right' and map:get(x + 1, y).visited then nv.x = 1
+            --     elseif key == 'up' and map:get(x, y - 1).visited then nv.y = -1
+            --     elseif key == 'down' and map:get(x, y + 1).visited then nv.y = 1
+            --     end
 
-                if nv:len2() > 0 then
-                    self.moving = true
-                    Timer.tween(0.5, self.pos, { x = self.pos.x + nv.x, y = self.pos.y + nv.y }, 'linear', function ()
-                        self.moving = false
-                    end)
-                end
-            end),
+            --     if nv:len2() > 0 then
+            --         self.moving = true
+            --         Timer.tween(0.5, self.pos, { x = self.pos.x + nv.x, y = self.pos.y + nv.y }, 'linear', function ()
+            --             self.moving = false
+            --         end)
+            --     end
+            -- end),
         }
+    end,
+
+    move = function (self, x, y)
+        self:moveTo(self.pos.x + x, self.pos.y + y)
+    end,
+
+    moveTo = function (self, x, y)
+        Timer.tween(0.1, self.pos, { x = x, y = y })
+    end,
+
+    moveAlongPath = function (self, path)
+        Timer.every(0.11, function ()
+            if #path == 0 then return false end
+            local p = table.remove(path, 1)
+            self:moveTo(p.x, p.y)
+        end)
     end,
 
     draw = function (self, cellWidth, cellHeight)
